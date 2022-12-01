@@ -3,6 +3,7 @@ import numpy as np
 import random
 from collections import deque
 from game import SnakeGame, Direction, Point, BLOCK_SIZE
+from model import Linear_QNet,QTrainer
 
 MAX_MEM = 100_000
 BATCH_SIZE = 1000
@@ -16,10 +17,10 @@ class Agent:
         #gamma memory(use deque), model and trainer
         self.n_games = 0
         self.epsilon = 0.9
-        self.gamme = 0.9
+        self.gamma = 0.9
         self.memory = deque(maxlen=MAX_MEM)
-        self.model = None
-        self.trainer = None
+        self.model = Linear_QNet(11,256,3)
+        self.trainer = QTrainer(self.model,LR,self.gamma)
        
 
     def get_state(self,game):
@@ -78,7 +79,8 @@ class Agent:
         pass
 
     def train_short_memory(self, state, action, reward, next_state, done):
-        # call train_step()
+        
+        
         pass
 
     def get_action(self, state):
