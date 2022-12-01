@@ -67,21 +67,23 @@ class Agent:
                 (head.y > food.y)
                 
                 ]
-        return state
+        return np.array(state,dtype=int)
 
     def remember(self, state, action, reward, next_state, done):
         # append to deque
         self.memory.append((state, action, reward, next_state, done))
-        pass
+        
 
     def train_long_memory(self):
-        #fetch batch using random.sample
-        pass
+        if len(self.memory) > BATCH_SIZE:
+            mini_batch = random.sample(self.memory,BATCH_SIZE)
+        else:
+            mini_batch = self.memory
+        states, actions, rewards, next_states, dones = zip(*mini_batch)
+        self.trainer.train_step(states,actions,rewards,next_states,dones)
 
     def train_short_memory(self, state, action, reward, next_state, done):
-        
-        
-        pass
+        self.trainer.train_step(state, action, reward, next_state, done)
 
     def get_action(self, state):
         # random moves tradeoff between exploration and pediction
