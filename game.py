@@ -25,7 +25,7 @@ BLUE2 = (0, 100, 255)
 BLACK = (0,0,0)
 
 BLOCK_SIZE = 20
-SPEED = 20
+SPEED = 60
 
 class SnakeGame:
     
@@ -85,7 +85,7 @@ class SnakeGame:
         # 4. place new food or just move
         if self.head == self.food:
             self.score += 1
-            reward += 10
+            reward = 10
             self._place_food()
         else:
             self.snake.pop()
@@ -127,9 +127,9 @@ class SnakeGame:
         directions = [Direction.UP,Direction.RIGHT,Direction.DOWN,Direction.LEFT]
         index = directions.index(self.direction)
 
-        if np.equal(action, np.array([1,0,0])):
+        if np.array_equal(action, [1,0,0]):
             new_dir = directions[index]
-        elif np.equal(action, np.array([0,1,0])):
+        elif np.array_equal(action, [0,1,0]):
             new_dir = directions[(index+1)%4]
         else:
             new_dir = directions[(index-1)%4]

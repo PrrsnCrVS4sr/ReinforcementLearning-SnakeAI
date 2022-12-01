@@ -4,6 +4,8 @@ import random
 from collections import deque
 from game import SnakeGame, Direction, Point, BLOCK_SIZE
 from model import Linear_QNet,QTrainer
+from utils import plot
+
 
 MAX_MEM = 100_000
 BATCH_SIZE = 1000
@@ -122,12 +124,18 @@ def train():
             game.start()
             agent.n_games +=1
             agent.train_long_memory()
-            scores.append(score)
-            total_score = score
 
-            if total_score > best_score:
-                best_score = total_score
-        print(f"{agent.n_games}, {score}, {best_score}")
+            if score > best_score:
+                best_score = score
+            
+            print(f"{agent.n_games}, {score}, {best_score}")
+
+            scores.append(score)
+            total_score += score 
+            mean_score = total_score/agent.n_games
+            mean_scores.append(mean_score)
+
+            plot(scores=scores,mean_scores=mean_scores)
     # lists for keeping track of scores
     # mean scores and final scores
     # total score, best score
