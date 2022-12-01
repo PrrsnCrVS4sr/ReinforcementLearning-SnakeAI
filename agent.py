@@ -16,7 +16,6 @@ class Agent:
         #store more paramters like num games, epsilon for randomness
         #gamma memory(use deque), model and trainer
         self.n_games = 0
-        self.epsilon = 0.9
         self.gamma = 0.9
         self.memory = deque(maxlen=MAX_MEM)
         self.model = Linear_QNet(11,256,3)
@@ -86,8 +85,17 @@ class Agent:
         self.trainer.train_step(state, action, reward, next_state, done)
 
     def get_action(self, state):
-        # random moves tradeoff between exploration and pediction
-        pass
+        self.epsilon = 80 -self.n_games
+        final_move = [0,0,0]
+        if random.randint(0,200) < self.epsilon:
+            idx = random.randint(0,2)
+            final_move[idx] = 1
+        else:
+            state0 = torch.tensor(state,dtype=torch.float)
+            idx = torch.argmax(self.model(state0)).item()
+            final_move[idx] = 1
+
+        return final_move
 
 def train():
     scores  = []
