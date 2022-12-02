@@ -52,6 +52,7 @@ class SnakeGame:
         self.food = None
         self._place_food()
         self.frame_iteration = 0
+        self.last_food_time = 0
 
 
     def _place_food(self):
@@ -81,9 +82,11 @@ class SnakeGame:
             game_over = True
             reward = -10
             return reward ,game_over, self.score
-            
+        if self.frame_iteration - self.last_food_time > 10:
+            reward -= 0.5    
         # 4. place new food or just move
         if self.head == self.food:
+            self.last_food_time = self.frame_iteration
             self.score += 1
             reward = 10
             self._place_food()
